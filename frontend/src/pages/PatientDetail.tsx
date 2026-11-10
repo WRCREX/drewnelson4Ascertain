@@ -1,5 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 
+import { ErrorState } from "../components/ErrorState";
 import { StatusBadge } from "../components/StatusBadge";
 import { NotesSection } from "../components/NotesSection";
 import { SummaryCard } from "../components/SummaryCard";
@@ -10,11 +11,11 @@ export function PatientDetail() {
   const { id } = useParams();
   const patientId = Number(id);
   const navigate = useNavigate();
-  const { data: patient, isPending, isError, error } = usePatient(patientId);
+  const { data: patient, isPending, isError, error, refetch } = usePatient(patientId);
   const deletePatient = useDeletePatient();
 
   if (isPending) return <div className={styles.spinner}>Loading patient...</div>;
-  if (isError) return <div className={styles.formError}>{(error as Error).message}</div>;
+  if (isError) return <ErrorState error={error as Error} onRetry={() => refetch()} />;
 
   async function handleDelete() {
     // double-step confirm kept inline; a real product would use a modal component

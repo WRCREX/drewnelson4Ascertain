@@ -1,5 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 
+import { ErrorState } from "../components/ErrorState";
 import { PatientForm } from "../components/PatientForm";
 import { usePatient, useUpdatePatient } from "../hooks/usePatients";
 import type { PatientInput } from "../lib/types";
@@ -9,11 +10,11 @@ export function PatientEdit() {
   const { id } = useParams();
   const patientId = Number(id);
   const navigate = useNavigate();
-  const { data: patient, isPending, isError, error } = usePatient(patientId);
+  const { data: patient, isPending, isError, error, refetch } = usePatient(patientId);
   const updatePatient = useUpdatePatient(patientId);
 
   if (isPending) return <div className={styles.spinner}>Loading patient...</div>;
-  if (isError) return <div className={styles.formError}>{(error as Error).message}</div>;
+  if (isError) return <ErrorState error={error as Error} onRetry={() => refetch()} />;
 
   async function handleSubmit(data: PatientInput) {
     await updatePatient.mutateAsync(data);

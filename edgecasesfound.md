@@ -33,3 +33,11 @@ QA log from manual passes over the running app. Each entry: what was found, why 
 **Why it matters:** A sort indicator that lies is worse than no indicator — users make decisions from it.
 
 **Fix:** The UI keeps its arrow state in age semantics and flips the direction it sends to the API when (and only when) the sort column is `date_of_birth`. Server API unchanged; the mapping is one line at the single call site.
+
+## 5. Backend outage showed "Request failed (502)" to clinical users
+
+**Found:** With the backend container stopped (simulating an API outage), the UI showed a raw "Request failed (502)" — because nginx answers for the dead upstream, the gateway error bypassed the friendly network-failure message. Medical staff would have no idea what a 502 is or what to do about it.
+
+**Why it matters:** The users of this product are clinicians, not engineers. An error state has to answer: what happened (in plain language), is my data safe, and what do I do now.
+
+**Fix:** Gateway statuses (502/503/504) are now translated to "The server is temporarily unavailable." and every top-level error surface renders a shared `ErrorState` component: plain-language message, reassurance that data is safe, a one-click Try Again (refetches via TanStack Query), and a pointer to IT support if retrying doesn't resolve it. A future direction noted in the README: an ops agent with diagnose/restart capabilities watching these failures — fitting, given the domain.

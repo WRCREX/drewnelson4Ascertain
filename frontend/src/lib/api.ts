@@ -37,6 +37,12 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 
   if (res.status === 204) return undefined as T;
 
+  // the reverse proxy answers 502/503/504 when the API is down, so translate
+  // gateway errors into the same human message as a network failure
+  if (res.status === 502 || res.status === 503 || res.status === 504) {
+    throw new ApiError(res.status, "The server is temporarily unavailable.");
+  }
+
   const body = await res.json().catch(() => null);
   if (!res.ok) {
     const detail = body?.detail ?? `Request failed (${res.status})`;

@@ -133,6 +133,7 @@ Errors use appropriate status codes: 404 for missing resources, 422 with structu
 ### What I'd Do Next
 
 - Auth (practice staff vs. clinician roles) at the router dependency level
+- An ops agent for self-healing: the UI's ErrorState already funnels outages to one component; the next step is an agent that watches health checks, diagnoses (logs, container state) and restarts services, paging a human only when automation fails
 - WebSocket channel for real-time status changes, invalidating the Query cache
 - pytest suite against a throwaway Postgres (testcontainers) for the repository layer
 - CI: lint + typecheck + build on PR

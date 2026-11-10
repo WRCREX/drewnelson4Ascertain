@@ -10,6 +10,7 @@ import { usePatientList } from "../hooks/usePatients";
 import { useDebounce } from "../hooks/useDebounce";
 import type { PatientStatus } from "../lib/types";
 import { styles } from "../styles";
+import { ErrorState } from "./ErrorState";
 import { StatusBadge } from "./StatusBadge";
 
 const ROW_HEIGHT = 48;
@@ -32,7 +33,7 @@ export function PatientList() {
   // the on-screen arrow semantically correct for age
   const apiSortDir = sortBy === "date_of_birth" ? (sortDir === "asc" ? "desc" : "asc") : sortDir;
 
-  const { data, isPending, isError, error, isPlaceholderData } = usePatientList({
+  const { data, isPending, isError, error, isPlaceholderData, refetch } = usePatientList({
     page,
     page_size: PAGE_SIZE,
     search: debouncedSearch,
@@ -67,7 +68,7 @@ export function PatientList() {
   }
 
   if (isError) {
-    return <div className={styles.formError}>{(error as Error).message}</div>;
+    return <ErrorState error={error as Error} onRetry={() => refetch()} />;
   }
 
   return (

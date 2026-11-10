@@ -128,6 +128,7 @@ Errors use appropriate status codes: 404 for missing resources, 422 with structu
 - **Database migrations with Alembic** (schema versioning from day one)
 - **List virtualization** with TanStack Virtual
 - Sorting/filtering query parameters on the list endpoint
+- Request logging middleware (method, path, status, duration on every request)
 - Route-level code splitting (each page ships as its own chunk)
 - Dark/light theme switching (header toggle; respects OS preference on first visit, persists the choice, and the entire theme lives in the single-file design system)
 

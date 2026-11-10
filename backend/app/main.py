@@ -1,3 +1,5 @@
+import logging
+import time
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request, status
@@ -21,6 +23,22 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="Healthcare Dashboard API", version="1.0.0", lifespan=lifespan)
+
+logger = logging.getLogger("app.requests")
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s %(message)s")
+
+
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    """Structured request log: method, path, status, duration."""
+    start = time.perf_counter()
+    response = await call_next(request)
+    duration_ms = (time.perf_counter() - start) * 1000
+    logger.info(
+        "%s %s -> %d (%.1fms)", request.method, request.url.path, response.status_code, duration_ms
+    )
+    return response
+
 
 app.add_middleware(
     CORSMiddleware,

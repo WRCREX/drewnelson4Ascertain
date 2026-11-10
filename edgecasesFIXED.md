@@ -1,14 +1,14 @@
 # Edge Cases: Found & Fixed
 
-QA log from manual passes over the running app — on multiple machines, including a cold clone. Every entry here was found, root-caused, **fixed, and verified** before submission. Format: what was found → why it matters → the fix.
+QA log from manual passes over the running app, on multiple machines, including a cold clone. Every entry here was found, root-caused, **fixed, and verified** before submission. Format: what was found → why it matters → the fix.
 
 ## 1. Dropdowns didn't read as dropdowns
 
 **Found:** On the New Patient form, the Blood type and Status `<select>` elements rendered at native width next to full-width text inputs. Visually they broke the form grid, and without a clear affordance it wasn't obvious they were submenus at all.
 
-**Why it matters:** Form scanability — a user filling the form hits two controls that look like misaligned buttons instead of pickable fields.
+**Why it matters:** Form scanability: a user filling the form hits two controls that look like misaligned buttons instead of pickable fields.
 
-**Fix:** Selects now span full width like every other field, with native styling stripped (`appearance-none`) and a custom chevron icon so the affordance is explicit. The status filter on the patient list keeps a fixed width so the toolbar stays compact, via a width override on the same shared style token. One change in `styles.ts` + one CSS utility restyled every select in the app — the single-file design system doing its job.
+**Fix:** Selects now span full width like every other field, with native styling stripped (`appearance-none`) and a custom chevron icon so the affordance is explicit. The status filter on the patient list keeps a fixed width so the toolbar stays compact, via a width override on the same shared style token. One change in `styles.ts` + one CSS utility restyled every select in the app. The single-file design system doing its job.
 
 ## 2. "New Patient" as a sidebar sibling was confusing navigation
 
@@ -30,34 +30,34 @@ QA log from manual passes over the running app — on multiple machines, includi
 
 **Found:** During a full browser QA pass: clicking the Age header twice showed "Age ↓" while ages rendered ascending 25 → 57. The column sorts by `date_of_birth` server-side, and DOB order is the inverse of age order (earliest birth date = oldest patient), so the arrow told the opposite of the truth.
 
-**Why it matters:** A sort indicator that lies is worse than no indicator — users make decisions from it.
+**Why it matters:** A sort indicator that lies is worse than no indicator: users make decisions from it.
 
 **Fix:** The UI keeps its arrow state in age semantics and flips the direction it sends to the API when (and only when) the sort column is `date_of_birth`. Server API unchanged; the mapping is one line at the single call site.
 
 ## 5. Backend outage showed "Request failed (502)" to clinical users
 
-**Found:** With the backend container stopped (simulating an API outage), the UI showed a raw "Request failed (502)" — because nginx answers for the dead upstream, the gateway error bypassed the friendly network-failure message. Medical staff would have no idea what a 502 is or what to do about it.
+**Found:** With the backend container stopped (simulating an API outage), the UI showed a raw "Request failed (502)": because nginx answers for the dead upstream, the gateway error bypassed the friendly network-failure message. Medical staff would have no idea what a 502 is or what to do about it.
 
 **Why it matters:** The users of this product are clinicians, not engineers. An error state has to answer: what happened (in plain language), is my data safe, and what do I do now.
 
-**Fix:** Gateway statuses (502/503/504) are now translated to "The server is temporarily unavailable." and every top-level error surface renders a shared `ErrorState` component: plain-language message, reassurance that data is safe, a one-click Try Again (refetches via TanStack Query), and a pointer to IT support if retrying doesn't resolve it. A future direction noted in the README: an ops agent with diagnose/restart capabilities watching these failures — fitting, given the domain.
+**Fix:** Gateway statuses (502/503/504) are now translated to "The server is temporarily unavailable." and every top-level error surface renders a shared `ErrorState` component: plain-language message, reassurance that data is safe, a one-click Try Again (refetches via TanStack Query), and a pointer to IT support if retrying doesn't resolve it. A future direction noted in the README: an ops agent with diagnose/restart capabilities watching these failures. Fitting, given the domain.
 
 ## 6. During an outage the UI hung on "Loading..." with no timeout and no status
 
-**Found:** Follow-up testing on #5: when the backend container stops, nginx keeps dialing the dead upstream's IP and waits out its full connect timeout (~60s) before answering 502. From the user's chair that's an indefinite "Loading patients..." — no error, no explanation, nothing to do but stare.
+**Found:** Follow-up testing on #5: when the backend container stops, nginx keeps dialing the dead upstream's IP and waits out its full connect timeout (~60s) before answering 502. From the user's chair that's an indefinite "Loading patients...": no error, no explanation, nothing to do but stare.
 
 **Why it matters:** An infinite spinner is the worst outage UX there is: it doesn't admit anything is wrong, so users blame themselves, refresh repeatedly, or walk away mid-task.
 
 **Fix:** Two layers.
-1. **Client-side request timeout (10s)** via `AbortSignal.timeout` — no request can hang the UI longer than that, and the timeout surfaces as "The server is taking too long to respond."
-2. **Connection monitor + banner**: the app polls `GET /health` every 10s. The moment it fails, a red banner appears on every page — "Connection to the server lost. Your data is safe — we're reconnecting automatically..." — with a Retry now button and an IT-support pointer. When the health check succeeds again, the monitor invalidates every cached query, so the whole app refreshes itself without the user touching anything.
+1. **Client-side request timeout (10s)** via `AbortSignal.timeout`: no request can hang the UI longer than that, and the timeout surfaces as "The server is taking too long to respond."
+2. **Connection monitor + banner**: the app polls `GET /health` every 10s. The moment it fails, a red banner appears on every page ("Connection to the server lost... reconnecting automatically...") with a Retry now button and an IT-support pointer. When the health check succeeds again, the monitor invalidates every cached query, so the whole app refreshes itself without the user touching anything.
 
-Deliberately out of scope: a "restart the server" button in the browser. The frontend has no control plane over the infrastructure, and pretending otherwise (a button that can't actually restart anything) would be worse than honest messaging. The real version of that idea — an ops agent that diagnoses and restarts services — lives in the README's "What I'd Do Next."
+Deliberately out of scope: a "restart the server" button in the browser. The frontend has no control plane over the infrastructure, and pretending otherwise (a button that can't actually restart anything) would be worse than honest messaging. The real version of that idea, an ops agent that diagnoses and restarts services, lives in the README's "What I'd Do Next."
 
 ## 7. Connection health was only visible when things were already broken
 
-**Found:** After #6, status communication was all-or-nothing: no signal at all while healthy, a red banner once broken. Users had no ambient confirmation that the system was fine — which is exactly what makes people distrust a dashboard between incidents.
+**Found:** After #6, status communication was all-or-nothing: no signal at all while healthy, a red banner once broken. Users had no ambient confirmation that the system was fine, which is exactly what makes people distrust a dashboard between incidents.
 
 **Why it matters:** Clinical software earns trust by being legible about its own state at all times, not just during failures.
 
-**Fix:** A persistent status pill in the header on every page: a softly glowing green dot with "Connected" while the health check passes, flipping to a red dot with "Disconnected" during an outage. Division of labor keeps it non-redundant with the banner — the pill is passive ambient status; the banner appears only when down and carries the instructions (reconnecting automatically, retry, contact IT). Both are driven by the same `useHealth` poll, so they can never disagree. Considered and rejected an ECG-waveform/flatline visual: cute in a devtool, tone-deaf in software whose users watch real flatlines.
+**Fix:** A persistent status pill in the header on every page: a softly glowing green dot with "Connected" while the health check passes, flipping to a red dot with "Disconnected" during an outage. Division of labor keeps it non-redundant with the banner: the pill is passive ambient status; the banner appears only when down and carries the instructions (reconnecting automatically, retry, contact IT). Both are driven by the same `useHealth` poll, so they can never disagree. Considered and rejected an ECG-waveform/flatline visual: cute in a devtool, tone-deaf in software whose users watch real flatlines.

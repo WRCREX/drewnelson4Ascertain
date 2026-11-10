@@ -5,6 +5,8 @@ Patient management dashboard for a medical practice. React (TypeScript) frontend
 ## Quick Start
 
 ```bash
+git clone https://github.com/WRCREX/drewnelson4Ascertain.git
+cd drewnelson4Ascertain
 cp .env.example .env
 docker compose up --build
 ```

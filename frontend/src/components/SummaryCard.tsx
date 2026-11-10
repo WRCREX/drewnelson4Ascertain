@@ -12,7 +12,7 @@ export function SummaryCard({ patientId }: { patientId: number }) {
       ) : isError ? (
         <div className={styles.formError}>{(error as Error).message}</div>
       ) : (
-        <p className="mt-3 text-sm leading-6 text-slate-700">{data.narrative}</p>
+        <p className={`${styles.bodyText} mt-3 leading-6`}>{data.narrative}</p>
       )}
     </div>
   );

@@ -3,6 +3,7 @@ import { NavLink, Outlet } from "react-router-dom";
 import { styles } from "../styles";
 import { ConnectionBanner } from "./ConnectionBanner";
 import { ConnectionStatus } from "./ConnectionStatus";
+import { ThemeToggle } from "./ThemeToggle";
 
 const navItems = [
   { to: "/", label: "Dashboard", end: true },
@@ -29,6 +30,7 @@ export function Layout() {
               {item.label}
             </NavLink>
           ))}
+          <ThemeToggle />
         </nav>
       </header>
       <div className={styles.body}>

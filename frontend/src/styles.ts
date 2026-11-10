@@ -2,81 +2,94 @@
 // the app is designed on a fixed 1280px grid for pixel-perfect parity with future
 // native/mobile ports, with graceful degradation below that width. Every component
 // pulls class strings from here, so a restyle (or a token-based mobile port) touches one file.
+// Dark mode lives here too: every token carries its own dark: variant, so the theme
+// toggle is a single class flip at the document root.
 
 export const styles = {
   // layout shell: fixed design grid, centered, degrades below 1280
   shell: "mx-auto w-[1280px] max-w-full min-h-screen flex flex-col",
   header:
-    "h-16 flex items-center justify-between px-6 bg-white border-b border-slate-200 sticky top-0 z-10",
-  headerBrand: "text-lg font-semibold tracking-tight text-slate-900",
+    "h-16 flex items-center justify-between px-6 bg-white border-b border-slate-200 sticky top-0 z-10 dark:bg-slate-900 dark:border-slate-800",
+  headerBrand: "text-lg font-semibold tracking-tight text-slate-900 dark:text-slate-100",
   headerNav: "flex items-center gap-1",
   navLink:
-    "px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100",
-  navLinkActive: "px-3 py-2 rounded-md text-sm font-medium bg-slate-900 text-white",
+    "px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-100 dark:hover:bg-slate-800",
+  navLinkActive:
+    "px-3 py-2 rounded-md text-sm font-medium bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900",
   body: "flex flex-1 min-h-0",
   sidebar:
-    "w-56 shrink-0 border-r border-slate-200 bg-white p-4 hidden md:flex flex-col gap-1",
+    "w-56 shrink-0 border-r border-slate-200 bg-white p-4 hidden md:flex flex-col gap-1 dark:bg-slate-900 dark:border-slate-800",
   sidebarLink:
-    "px-3 py-2 rounded-md text-sm text-slate-600 hover:bg-slate-100 hover:text-slate-900",
-  sidebarLinkActive: "px-3 py-2 rounded-md text-sm bg-slate-100 text-slate-900 font-medium",
+    "px-3 py-2 rounded-md text-sm text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100",
+  sidebarLinkActive:
+    "px-3 py-2 rounded-md text-sm bg-slate-100 text-slate-900 font-medium dark:bg-slate-800 dark:text-slate-100",
   main: "flex-1 min-w-0 p-6",
 
   // typography
-  pageTitle: "text-2xl font-semibold text-slate-900",
-  pageSubtitle: "text-sm text-slate-500 mt-1",
-  sectionTitle: "text-base font-semibold text-slate-900",
+  pageTitle: "text-2xl font-semibold text-slate-900 dark:text-slate-100",
+  pageSubtitle: "text-sm text-slate-500 mt-1 dark:text-slate-400",
+  sectionTitle: "text-base font-semibold text-slate-900 dark:text-slate-100",
+  bodyText: "text-sm text-slate-700 dark:text-slate-300",
+  mutedText: "text-sm text-slate-500 dark:text-slate-400",
 
   // surfaces
-  card: "bg-white rounded-lg border border-slate-200 shadow-sm",
-  cardPad: "bg-white rounded-lg border border-slate-200 shadow-sm p-5",
+  card: "bg-white rounded-lg border border-slate-200 shadow-sm dark:bg-slate-900 dark:border-slate-800",
+  cardPad:
+    "bg-white rounded-lg border border-slate-200 shadow-sm p-5 dark:bg-slate-900 dark:border-slate-800",
   statGrid: "grid grid-cols-1 sm:grid-cols-3 gap-4",
-  statValue: "text-3xl font-semibold text-slate-900",
-  statLabel: "text-sm text-slate-500 mt-1",
+  statValue: "text-3xl font-semibold text-slate-900 dark:text-slate-100",
+  statLabel: "text-sm text-slate-500 mt-1 dark:text-slate-400",
 
   // controls
   input:
-    "h-9 w-full rounded-md border border-slate-300 bg-white px-3 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400",
+    "h-9 w-full rounded-md border border-slate-300 bg-white px-3 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:ring-slate-500",
   select:
-    "select-chevron h-9 w-full appearance-none rounded-md border border-slate-300 bg-white pl-3 pr-9 text-sm cursor-pointer focus:outline-none focus:ring-2 focus:ring-slate-400",
+    "select-chevron h-9 w-full appearance-none rounded-md border border-slate-300 bg-white pl-3 pr-9 text-sm cursor-pointer focus:outline-none focus:ring-2 focus:ring-slate-400 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:focus:ring-slate-500",
   textarea:
-    "w-full rounded-md border border-slate-300 bg-white p-3 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400",
-  label: "block text-sm font-medium text-slate-700 mb-1",
-  fieldError: "text-xs text-red-600 mt-1",
+    "w-full rounded-md border border-slate-300 bg-white p-3 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:ring-slate-500",
+  label: "block text-sm font-medium text-slate-700 mb-1 dark:text-slate-300",
+  fieldError: "text-xs text-red-600 mt-1 dark:text-red-400",
   formError:
-    "rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700",
+    "rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-900 dark:bg-red-950 dark:text-red-300",
 
   btnPrimary:
-    "inline-flex items-center justify-center h-9 px-4 rounded-md bg-slate-900 text-white text-sm font-medium hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed",
+    "inline-flex items-center justify-center h-9 px-4 rounded-md bg-slate-900 text-white text-sm font-medium hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white",
   btnSecondary:
-    "inline-flex items-center justify-center h-9 px-4 rounded-md border border-slate-300 bg-white text-sm font-medium text-slate-700 hover:bg-slate-50",
+    "inline-flex items-center justify-center h-9 px-4 rounded-md border border-slate-300 bg-white text-sm font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800",
   btnDanger:
     "inline-flex items-center justify-center h-9 px-4 rounded-md bg-red-600 text-white text-sm font-medium hover:bg-red-500 disabled:opacity-50",
-  btnGhostDanger: "text-xs font-medium text-red-600 hover:text-red-500",
+  btnGhostDanger: "text-xs font-medium text-red-600 hover:text-red-500 dark:text-red-400",
+  themeToggle:
+    "inline-flex items-center justify-center h-8 w-8 rounded-md text-slate-500 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-100 dark:hover:bg-slate-800",
 
   // patient list
   listToolbar: "flex flex-wrap items-center gap-3 mb-4",
   listContainer: "overflow-auto",
   listHeaderRow:
-    "grid grid-cols-[2fr_1fr_1.5fr_1fr_0.5fr] gap-4 px-4 py-2 border-b border-slate-200 bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-500 sticky top-0",
+    "grid grid-cols-[2fr_1fr_1.5fr_1fr_0.5fr] gap-4 px-4 py-2 border-b border-slate-200 bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-500 sticky top-0 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400",
   listRow:
-    "grid grid-cols-[2fr_1fr_1.5fr_1fr_0.5fr] gap-4 px-4 items-center border-b border-slate-100 text-sm hover:bg-slate-50 cursor-pointer",
-  sortButton: "flex items-center gap-1 hover:text-slate-900",
+    "grid grid-cols-[2fr_1fr_1.5fr_1fr_0.5fr] gap-4 px-4 items-center border-b border-slate-100 text-sm hover:bg-slate-50 cursor-pointer dark:border-slate-800 dark:hover:bg-slate-800",
+  listRowName: "font-medium text-slate-900 dark:text-slate-100",
+  sortButton: "flex items-center gap-1 hover:text-slate-900 dark:hover:text-slate-100",
 
   // status badges keyed by PatientStatus
   badge: {
-    active: "inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700",
-    inactive: "inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600",
-    critical: "inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700",
+    active:
+      "inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300",
+    inactive:
+      "inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400",
+    critical:
+      "inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-300",
   } as const,
 
   // notes
-  noteItem: "border-b border-slate-100 py-3 last:border-0",
-  noteMeta: "text-xs text-slate-400 mb-1",
-  noteContent: "text-sm text-slate-700 whitespace-pre-wrap",
+  noteItem: "border-b border-slate-100 py-3 last:border-0 dark:border-slate-800",
+  noteMeta: "text-xs text-slate-400 mb-1 dark:text-slate-500",
+  noteContent: "text-sm text-slate-700 whitespace-pre-wrap dark:text-slate-300",
 
   // connection status
   statusPill:
-    "inline-flex items-center gap-2 h-7 px-3 rounded-full border border-slate-200 bg-slate-50 text-xs font-medium text-slate-600 select-none",
+    "inline-flex items-center gap-2 h-7 px-3 rounded-full border border-slate-200 bg-slate-50 text-xs font-medium text-slate-600 select-none dark:border-slate-700 dark:bg-slate-950 dark:text-slate-400",
   statusDotUp:
     "h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_6px_2px_rgba(16,185,129,0.45)] animate-pulse",
   statusDotDown: "h-2 w-2 rounded-full bg-red-500 shadow-[0_0_6px_2px_rgba(239,68,68,0.45)]",
@@ -87,12 +100,12 @@ export const styles = {
     "shrink-0 h-8 px-3 rounded-md bg-white/15 hover:bg-white/25 text-white text-sm font-medium",
 
   // misc
-  emptyState: "py-12 text-center text-sm text-slate-500",
-  spinner: "py-12 text-center text-sm text-slate-400 animate-pulse",
-  pagination: "flex items-center justify-between mt-4 text-sm text-slate-600",
+  emptyState: "py-12 text-center text-sm text-slate-500 dark:text-slate-400",
+  spinner: "py-12 text-center text-sm text-slate-400 animate-pulse dark:text-slate-500",
+  pagination: "flex items-center justify-between mt-4 text-sm text-slate-600 dark:text-slate-400",
   kvGrid: "grid grid-cols-2 gap-x-8 gap-y-3 text-sm",
-  kvLabel: "text-slate-500",
-  kvValue: "text-slate-900 font-medium",
+  kvLabel: "text-slate-500 dark:text-slate-400",
+  kvValue: "text-slate-900 font-medium dark:text-slate-100",
 } as const;
 
 export function cx(...classes: Array<string | false | undefined>): string {

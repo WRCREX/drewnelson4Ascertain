@@ -129,6 +129,7 @@ Errors use appropriate status codes: 404 for missing resources, 422 with structu
 - **List virtualization** with TanStack Virtual
 - Sorting/filtering query parameters on the list endpoint
 - Route-level code splitting (each page ships as its own chunk)
+- Dark/light theme switching (header toggle; respects OS preference on first visit, persists the choice, and the entire theme lives in the single-file design system)
 
 ### What I'd Do Next
 

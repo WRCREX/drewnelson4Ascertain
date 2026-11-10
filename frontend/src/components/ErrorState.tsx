@@ -12,8 +12,8 @@ export function ErrorState({ error, onRetry }: Props) {
   return (
     <div className={styles.cardPad}>
       <h2 className={styles.sectionTitle}>Something went wrong</h2>
-      <p className="mt-2 text-sm text-slate-600">{error.message}</p>
-      <p className="mt-1 text-sm text-slate-500">
+      <p className={`${styles.bodyText} mt-2`}>{error.message}</p>
+      <p className={`${styles.mutedText} mt-1`}>
         Your data is safe. This usually resolves on its own in a moment.
       </p>
       <div className="mt-4 flex items-center gap-4">
@@ -22,7 +22,7 @@ export function ErrorState({ error, onRetry }: Props) {
             Try Again
           </button>
         )}
-        <span className="text-xs text-slate-400">
+        <span className="text-xs text-slate-400 dark:text-slate-500">
           Still stuck? Contact your practice IT support.
         </span>
       </div>

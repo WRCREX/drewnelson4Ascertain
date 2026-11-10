@@ -150,7 +150,7 @@ export function PatientList() {
                     }}
                     onClick={() => navigate(`/patients/${p.id}`)}
                   >
-                    <span className="font-medium text-slate-900">
+                    <span className={styles.listRowName}>
                       {p.last_name}, {p.first_name}
                     </span>
                     <span>{p.age}</span>

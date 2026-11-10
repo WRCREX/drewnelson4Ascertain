@@ -37,7 +37,7 @@ export const styles = {
   input:
     "h-9 w-full rounded-md border border-slate-300 bg-white px-3 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400",
   select:
-    "h-9 rounded-md border border-slate-300 bg-white px-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-400",
+    "select-chevron h-9 w-full appearance-none rounded-md border border-slate-300 bg-white pl-3 pr-9 text-sm cursor-pointer focus:outline-none focus:ring-2 focus:ring-slate-400",
   textarea:
     "w-full rounded-md border border-slate-300 bg-white p-3 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400",
   label: "block text-sm font-medium text-slate-700 mb-1",

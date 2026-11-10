@@ -80,7 +80,7 @@ export function PatientList() {
           />
         </div>
         <select
-          className={styles.select}
+          className={`${styles.select} !w-44`}
           value={status}
           onChange={(e) => {
             setStatus(e.target.value as PatientStatus | "");

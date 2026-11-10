@@ -18,6 +18,31 @@ docker compose up --build
 
 On first boot the backend runs Alembic migrations and seeds the database with 20 realistic patients and sample clinical notes. The seed is idempotent — restarting never duplicates data.
 
+## Using the App
+
+Everything below assumes `docker compose up --build` has finished and you're at **http://localhost:3000**.
+
+1. **Dashboard** (`/`) — practice overview: total, active and critical patient counts, with a shortcut into the patient list.
+2. **Patient list** (`/patients`) — the 20 seeded patients, sorted by last name.
+   - **Search** the box at the top left by name or email (try `gonz`); results update as you type without blocking input.
+   - **Filter** by status with the dropdown (Active / Inactive / Critical).
+   - **Sort** by clicking any column header (Name, Age, Last Visit, Status); click again to flip direction.
+   - Rows are virtualized — paste in thousands of patients and scrolling stays smooth.
+3. **Patient detail** — click any row. You'll see the full profile, a **generated patient summary** (synthesized server-side from the profile + notes), and the **clinical notes** section.
+   - Add a note with the text box (try "BP 140/90, follow up in 2 weeks") — the summary card updates to reflect it.
+   - Delete a note with the Delete link on its row.
+4. **Create a patient** — "Add Patient" button on the list (or `/patients/new`). Submit the empty form to see field-level validation; server-side validation errors render on the exact same fields (e.g. force a bad payload via the API docs).
+5. **Edit / delete** — buttons at the top of any patient detail page. Delete asks for confirmation and returns you to the list.
+6. **API playground** — http://localhost:8000/docs is interactive OpenAPI: every endpoint can be exercised from the browser, no client needed. Quick checks:
+
+```bash
+curl http://localhost:8000/health
+curl "http://localhost:8000/patients?search=gonzalez"
+curl http://localhost:8000/patients/1/summary
+```
+
+**Ports used:** `3000` frontend (nginx), `8000` API (uvicorn), `5432` Postgres. If any are taken locally, remap the left side of the port pairs in `docker-compose.yml` (e.g. `"3001:80"`).
+
 ## Running Without Docker
 
 Backend (requires a local Postgres):

@@ -1,6 +1,6 @@
-# Edge Cases & UX Findings
+# Edge Cases: Found & Fixed
 
-QA log from manual passes over the running app. Each entry: what was found, why it matters, how it was resolved.
+QA log from manual passes over the running app — on multiple machines, including a cold clone. Every entry here was found, root-caused, **fixed, and verified** before submission. Format: what was found → why it matters → the fix.
 
 ## 1. Dropdowns didn't read as dropdowns
 

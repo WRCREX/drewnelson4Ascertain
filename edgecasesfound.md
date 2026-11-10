@@ -17,3 +17,11 @@ QA log from manual passes over the running app. Each entry: what was found, why 
 **Why it matters:** Navigation should answer "where am I?" with exactly one highlight, and actions shouldn't masquerade as places.
 
 **Fix:** Removed New Patient from the sidebar. Creation now lives where the user already is when they need it: a prominent "+ Add New Patient" button pinned to the right of the patient list toolbar. The route `/patients/new` still exists and is deep-linkable; the sidebar highlight correctly resolves to Patients for the entire patients section.
+
+## 3. Compose failed on machines running a local Postgres
+
+**Found:** `docker compose up` died with `Bind for 0.0.0.0:5432 failed: port is already allocated` on a machine with a native Postgres install. Dev machines very commonly have Postgres on 5432 (Homebrew, Postgres.app), so this would hit reviewers too.
+
+**Why it matters:** "Easy local setup" is a stated evaluation criterion; a port collision on the single most common database port is the opposite of that.
+
+**Fix:** The backend reaches the database over Docker's internal network (`db:5432`), so the host mapping is purely a convenience for inspecting the DB with `psql`. The host side now defaults to 5433 (overridable via `POSTGRES_HOST_PORT`), which cannot collide with a stock local Postgres. Documented in the README's port table.

@@ -41,7 +41,7 @@ curl "http://localhost:8000/patients?search=gonzalez"
 curl http://localhost:8000/patients/1/summary
 ```
 
-**Ports used:** `3000` frontend (nginx), `8000` API (uvicorn), `5432` Postgres. If any are taken locally, remap the left side of the port pairs in `docker-compose.yml` (e.g. `"3001:80"`).
+**Ports used:** `3000` frontend (nginx), `8000` API (uvicorn), `5433` Postgres (host side — deliberately not 5432, so a locally installed Postgres never collides; connect with `psql -h localhost -p 5433 -U postgres healthcare`). If any are taken locally, remap the left side of the port pairs in `docker-compose.yml` (e.g. `"3001:80"`) or set `POSTGRES_HOST_PORT` in `.env`.
 
 ## Running Without Docker
 

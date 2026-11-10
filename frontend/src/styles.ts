@@ -75,6 +75,11 @@ export const styles = {
   noteContent: "text-sm text-slate-700 whitespace-pre-wrap",
 
   // connection status
+  statusPill:
+    "inline-flex items-center gap-2 h-7 px-3 rounded-full border border-slate-200 bg-slate-50 text-xs font-medium text-slate-600 select-none",
+  statusDotUp:
+    "h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_6px_2px_rgba(16,185,129,0.45)] animate-pulse",
+  statusDotDown: "h-2 w-2 rounded-full bg-red-500 shadow-[0_0_6px_2px_rgba(239,68,68,0.45)]",
   connectionBanner:
     "flex items-center gap-3 bg-red-600 text-white text-sm px-6 py-2.5 sticky top-0 z-20",
   connectionDot: "h-2.5 w-2.5 rounded-full bg-white animate-pulse shrink-0",

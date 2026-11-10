@@ -53,3 +53,11 @@ QA log from manual passes over the running app — on multiple machines, includi
 2. **Connection monitor + banner**: the app polls `GET /health` every 10s. The moment it fails, a red banner appears on every page — "Connection to the server lost. Your data is safe — we're reconnecting automatically..." — with a Retry now button and an IT-support pointer. When the health check succeeds again, the monitor invalidates every cached query, so the whole app refreshes itself without the user touching anything.
 
 Deliberately out of scope: a "restart the server" button in the browser. The frontend has no control plane over the infrastructure, and pretending otherwise (a button that can't actually restart anything) would be worse than honest messaging. The real version of that idea — an ops agent that diagnoses and restarts services — lives in the README's "What I'd Do Next."
+
+## 7. Connection health was only visible when things were already broken
+
+**Found:** After #6, status communication was all-or-nothing: no signal at all while healthy, a red banner once broken. Users had no ambient confirmation that the system was fine — which is exactly what makes people distrust a dashboard between incidents.
+
+**Why it matters:** Clinical software earns trust by being legible about its own state at all times, not just during failures.
+
+**Fix:** A persistent status pill in the header on every page: a softly glowing green dot with "Connected" while the health check passes, flipping to a red dot with "Disconnected" during an outage. Division of labor keeps it non-redundant with the banner — the pill is passive ambient status; the banner appears only when down and carries the instructions (reconnecting automatically, retry, contact IT). Both are driven by the same `useHealth` poll, so they can never disagree. Considered and rejected an ECG-waveform/flatline visual: cute in a devtool, tone-deaf in software whose users watch real flatlines.

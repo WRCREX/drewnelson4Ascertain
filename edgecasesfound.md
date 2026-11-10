@@ -25,3 +25,11 @@ QA log from manual passes over the running app. Each entry: what was found, why 
 **Why it matters:** "Easy local setup" is a stated evaluation criterion; a port collision on the single most common database port is the opposite of that.
 
 **Fix:** The backend reaches the database over Docker's internal network (`db:5432`), so the host mapping is purely a convenience for inspecting the DB with `psql`. The host side now defaults to 5433 (overridable via `POSTGRES_HOST_PORT`), which cannot collide with a stock local Postgres. Documented in the README's port table.
+
+## 4. Age column's sort arrow was semantically inverted
+
+**Found:** During a full browser QA pass: clicking the Age header twice showed "Age ↓" while ages rendered ascending 25 → 57. The column sorts by `date_of_birth` server-side, and DOB order is the inverse of age order (earliest birth date = oldest patient), so the arrow told the opposite of the truth.
+
+**Why it matters:** A sort indicator that lies is worse than no indicator — users make decisions from it.
+
+**Fix:** The UI keeps its arrow state in age semantics and flips the direction it sends to the API when (and only when) the sort column is `date_of_birth`. Server API unchanged; the mapping is one line at the single call site.

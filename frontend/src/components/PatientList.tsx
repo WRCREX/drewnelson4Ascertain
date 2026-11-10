@@ -27,13 +27,18 @@ export function PatientList() {
 
   const debouncedSearch = useDebounce(search);
 
+  // the Age column sorts by date_of_birth underneath, which runs opposite to age:
+  // earliest DOB = oldest patient, so flip the direction sent to the API to keep
+  // the on-screen arrow semantically correct for age
+  const apiSortDir = sortBy === "date_of_birth" ? (sortDir === "asc" ? "desc" : "asc") : sortDir;
+
   const { data, isPending, isError, error, isPlaceholderData } = usePatientList({
     page,
     page_size: PAGE_SIZE,
     search: debouncedSearch,
     status,
     sort_by: sortBy,
-    sort_dir: sortDir,
+    sort_dir: apiSortDir,
   });
 
   const parentRef = useRef<HTMLDivElement>(null);

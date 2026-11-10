@@ -92,8 +92,11 @@ export function PatientList() {
           <option value="inactive">Inactive</option>
           <option value="critical">Critical</option>
         </select>
-        <button className={styles.btnPrimary} onClick={() => navigate("/patients/new")}>
-          Add Patient
+        <button
+          className={`${styles.btnPrimary} ml-auto`}
+          onClick={() => navigate("/patients/new")}
+        >
+          + Add New Patient
         </button>
       </div>
 

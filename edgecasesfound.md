@@ -9,3 +9,11 @@ QA log from manual passes over the running app. Each entry: what was found, why 
 **Why it matters:** Form scanability — a user filling the form hits two controls that look like misaligned buttons instead of pickable fields.
 
 **Fix:** Selects now span full width like every other field, with native styling stripped (`appearance-none`) and a custom chevron icon so the affordance is explicit. The status filter on the patient list keeps a fixed width so the toolbar stays compact, via a width override on the same shared style token. One change in `styles.ts` + one CSS utility restyled every select in the app — the single-file design system doing its job.
+
+## 2. "New Patient" as a sidebar sibling was confusing navigation
+
+**Found:** The sidebar listed New Patient as a peer of Dashboard and Patients, but it's an action on the patients collection, not a destination. Worse, navigating to `/patients/new` highlighted both Patients and New Patient simultaneously (the Patients link matches the route prefix), so the sidebar showed two "current" locations at once.
+
+**Why it matters:** Navigation should answer "where am I?" with exactly one highlight, and actions shouldn't masquerade as places.
+
+**Fix:** Removed New Patient from the sidebar. Creation now lives where the user already is when they need it: a prominent "+ Add New Patient" button pinned to the right of the patient list toolbar. The route `/patients/new` still exists and is deep-linkable; the sidebar highlight correctly resolves to Patients for the entire patients section.

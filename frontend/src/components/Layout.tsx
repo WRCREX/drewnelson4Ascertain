@@ -39,14 +39,6 @@ export function Layout() {
               {item.label}
             </NavLink>
           ))}
-          <NavLink
-            to="/patients/new"
-            className={({ isActive }) =>
-              isActive ? styles.sidebarLinkActive : styles.sidebarLink
-            }
-          >
-            New Patient
-          </NavLink>
         </aside>
         <main className={styles.main}>
           <Outlet />

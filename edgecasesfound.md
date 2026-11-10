@@ -41,3 +41,15 @@ QA log from manual passes over the running app. Each entry: what was found, why 
 **Why it matters:** The users of this product are clinicians, not engineers. An error state has to answer: what happened (in plain language), is my data safe, and what do I do now.
 
 **Fix:** Gateway statuses (502/503/504) are now translated to "The server is temporarily unavailable." and every top-level error surface renders a shared `ErrorState` component: plain-language message, reassurance that data is safe, a one-click Try Again (refetches via TanStack Query), and a pointer to IT support if retrying doesn't resolve it. A future direction noted in the README: an ops agent with diagnose/restart capabilities watching these failures — fitting, given the domain.
+
+## 6. During an outage the UI hung on "Loading..." with no timeout and no status
+
+**Found:** Follow-up testing on #5: when the backend container stops, nginx keeps dialing the dead upstream's IP and waits out its full connect timeout (~60s) before answering 502. From the user's chair that's an indefinite "Loading patients..." — no error, no explanation, nothing to do but stare.
+
+**Why it matters:** An infinite spinner is the worst outage UX there is: it doesn't admit anything is wrong, so users blame themselves, refresh repeatedly, or walk away mid-task.
+
+**Fix:** Two layers.
+1. **Client-side request timeout (10s)** via `AbortSignal.timeout` — no request can hang the UI longer than that, and the timeout surfaces as "The server is taking too long to respond."
+2. **Connection monitor + banner**: the app polls `GET /health` every 10s. The moment it fails, a red banner appears on every page — "Connection to the server lost. Your data is safe — we're reconnecting automatically..." — with a Retry now button and an IT-support pointer. When the health check succeeds again, the monitor invalidates every cached query, so the whole app refreshes itself without the user touching anything.
+
+Deliberately out of scope: a "restart the server" button in the browser. The frontend has no control plane over the infrastructure, and pretending otherwise (a button that can't actually restart anything) would be worse than honest messaging. The real version of that idea — an ops agent that diagnoses and restarts services — lives in the README's "What I'd Do Next."

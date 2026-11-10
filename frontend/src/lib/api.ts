@@ -23,14 +23,22 @@ export class ApiError extends Error {
   }
 }
 
+const REQUEST_TIMEOUT_MS = 10_000;
+
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   let res: Response;
   try {
     res = await fetch(`${BASE}${path}`, {
       headers: { "Content-Type": "application/json" },
+      // without a timeout, a dead upstream leaves the proxy (and the user) hanging
+      // for its full connect timeout; fail fast and let the UI say so honestly
+      signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
       ...init,
     });
-  } catch {
+  } catch (e) {
+    if (e instanceof DOMException && (e.name === "TimeoutError" || e.name === "AbortError")) {
+      throw new ApiError(0, "The server is taking too long to respond.");
+    }
     // fetch only throws on network-level failure; surface it distinctly from HTTP errors
     throw new ApiError(0, "Network error - is the API running?");
   }

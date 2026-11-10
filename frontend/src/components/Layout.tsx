@@ -1,6 +1,7 @@
 import { NavLink, Outlet } from "react-router-dom";
 
 import { styles } from "../styles";
+import { ConnectionBanner } from "./ConnectionBanner";
 
 const navItems = [
   { to: "/", label: "Dashboard", end: true },
@@ -10,6 +11,7 @@ const navItems = [
 export function Layout() {
   return (
     <div className={styles.shell}>
+      <ConnectionBanner />
       <header className={styles.header}>
         <span className={styles.headerBrand}>Healthcare Dashboard</span>
         <nav className={styles.headerNav}>

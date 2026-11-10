@@ -74,6 +74,13 @@ export const styles = {
   noteMeta: "text-xs text-slate-400 mb-1",
   noteContent: "text-sm text-slate-700 whitespace-pre-wrap",
 
+  // connection status
+  connectionBanner:
+    "flex items-center gap-3 bg-red-600 text-white text-sm px-6 py-2.5 sticky top-0 z-20",
+  connectionDot: "h-2.5 w-2.5 rounded-full bg-white animate-pulse shrink-0",
+  connectionRetry:
+    "shrink-0 h-8 px-3 rounded-md bg-white/15 hover:bg-white/25 text-white text-sm font-medium",
+
   // misc
   emptyState: "py-12 text-center text-sm text-slate-500",
   spinner: "py-12 text-center text-sm text-slate-400 animate-pulse",

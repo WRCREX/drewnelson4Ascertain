@@ -20,6 +20,11 @@ docker compose up --build
 
 On first boot the backend runs Alembic migrations and seeds the database with 20 realistic patients and sample clinical notes. The seed is idempotent: restarting never duplicates data.
 
+### Troubleshooting
+
+- **A port is already in use** (3000, 8000 or 5433): another stack or app holds it. Stop it, or remap the host side of the pair in `docker-compose.yml`.
+- **`could not translate host name "db"` or nginx `host not found in upstream`** after a failed first start: the containers were created against a half-initialized network. Run `docker compose down` then `docker compose up` to recreate them cleanly.
+
 ## Using the App
 
 Everything below assumes `docker compose up --build` has finished and you're at **http://localhost:3000**.
